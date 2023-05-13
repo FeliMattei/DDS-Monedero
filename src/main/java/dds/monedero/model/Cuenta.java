@@ -39,6 +39,11 @@ public class Cuenta {
   public void sacar(double cuanto) {
     validarMontoNegativo(cuanto);
 
+    validarExtraccion(cuanto);
+    new Movimiento(LocalDate.now(), cuanto, false).agregateA(this);
+  }
+
+  private void validarExtraccion(double cuanto) {
     if (getSaldo() - cuanto < 0) {
       throw new SaldoMenorException("No puede sacar mas de " + getSaldo() + " $");
     }
@@ -48,7 +53,6 @@ public class Cuenta {
       throw new MaximoExtraccionDiarioException("No puede extraer mas de $ " + 1000
           + " diarios, límite: " + limite);
     }
-    new Movimiento(LocalDate.now(), cuanto, false).agregateA(this);
   }
 
   private void validarMontoNegativo(double cuanto) {
